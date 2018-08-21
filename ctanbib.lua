@@ -31,8 +31,6 @@ version = {$version}
 }
 ]]
 
-local xml = require('luaxml-mod-xml')
-local handler = require('luaxml-mod-handler')
 local dom = require('luaxml-domobject')
 
 
@@ -45,46 +43,49 @@ local load_xml =  function(url)
   if string.len(info) == 0 then
     return false
   end
-  --print(pkginfo)
-  treehandler = handler.simpleTreeHandler()
-  treehandler.options.noReduce = {authorref=true}
-  x = xml.xmlParser(treehandler)
-  x:parse(info)
-  return treehandler.root
+  return dom.parse(info)
 end
 
 local get_authors = function(a)
-  local authors = {}
   local retrieved_authors = {}
-  -- fix LuaXML "feature" 
-  if #a == 0 then a = {a} end
   for _, author in ipairs(a) do
     local current = {}
-    current[#current+1] = author._attr.familyname
-    current[#current+1] = author._attr.givenname
+    current[#current+1] = author:get_attribute("familyname")
+    current[#current+1] = author:get_attribute("givenname")
     table.insert(retrieved_authors, table.concat(current, ", "))
   end
   return table.concat(retrieved_authors," and ")
 end
 
-local get_title = function(title)
-
-  local title = title:gsub("^(.)", function(a) return unicode.utf8.upper(a) end)
+local get_title = function(record)
+  local title = record:query_selector("name")[1]
+  if title then
+    title = title:get_text()
+    title = title:gsub("^(.)", function(a) return unicode.utf8.upper(a) end)
+  else
+    title = pkgname
+  end
   return string.format(titleformat, title)
 end
 
 
-local get_url = function(home)
-  local home = home or {}
-  local attr = home["_attr"] or {}
-  local href = attr.href or "http://www.ctan.org/pkg/"..pkgname
-  return href
+local get_url = function(record)
+  local home = record:query_selector("home")[1]
+  if home then return home:get_attribute("href") end
+  return "http://www.ctan.org/pkg/"..pkgname
 end
 
-local get_version = function(version)
-  local version = version or {}
-  local attr = version["_attr"] or {}
-  return attr["number"], attr["date"]
+local get_caption = function(record)
+  local caption = record:query_selector("caption")[1]
+  if caption then return caption:get_text() end
+  return nil
+end
+
+local get_version = function(record)
+  local version = record:query_selector("version")[1]
+  if version then
+    return version:get_attribute("number"), version:get_attribute("date")
+  end
 end
 
 local bibtex_escape = function(a)
@@ -98,24 +99,24 @@ local compile = function(template, records)
   end)
 end
 
-local entry = load_xml(url)
+local record = load_xml(url)
 
-if not entry then
+if not record then
   print("Cannot find entry for package "..pkgname)
   os.exit(1)
 end
 
 -- root element is also saved, so we use this trick 
-local record = entry.entry
+-- local record = entry.entry
 
 local e = {}
 
-e.author = get_authors(record.authorref)
+e.author = get_authors(record:query_selector("authorref"))
 e.package = pkgname
-e.title = get_title(record.name)
-e.subtitle = record.caption
-e.url = get_url(record.home)
-e.version, e.date = get_version(record.version)
+e.title = get_title(record)
+e.subtitle = get_caption(record)
+e.url = get_url(record)
+e.version, e.date = get_version(record)
 e.urldate = os.date("%Y-%m-%d")
 
 local result = compile(bibtexformat, e)
