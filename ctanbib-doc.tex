@@ -1,0 +1,42 @@
+\documentclass{ltxdoc}
+\newcommand\package[1]{\texttt{#1}}
+\title{The \texttt{ctanbib} package}
+\author{Michal Hoftich}
+\date{\gitdate, version \gitversion}
+\usepackage{hyperref}
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Schola}
+\setmonofont[Scale=MatchLowercase]{Inconsolatazi4}
+\usepackage{microtype}
+\begin{document}
+\maketitle
+
+\section{Introduction}
+This package provides script named \package{ctanbib} which can be used for retrieving of the bibliographic information for packages hosted on CTAN.
+
+It can be used in the following way:
+
+\begin{verbatim}
+ctanbib latex  
+\end{verbatim}
+
+This invocation will print data in the Bib\LaTeX\ format to the standard output:
+
+\begin{verbatim}
+@manual{latex,
+title = {The Latex package},
+subtitle = {A TeX macro package that defines LaTeX},
+author = {Lamport, Leslie and The LaTeX Team},
+url = {http://www.latex-project.org/},
+urldate = {2018-08-23}, 
+date = {2018-04-01},
+version = {PL 5}
+}
+\end{verbatim}
+
+\section{License}
+
+\section{Changelog}
+
+
+\end{document}
