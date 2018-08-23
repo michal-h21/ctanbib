@@ -3,13 +3,16 @@ kpse.set_program_name("luatex")
 -- ctanbib.lua -- export ctan entries to bib format
 --
 
-if #arg < 1 or arg[1]=="--help" or arg[1]=="-h" then 
+if #arg < 1 or arg[1]=="--help" or arg[1]=="-h" then
   print [[ctanbib - convert ctan package information to bibtex format
   Usage:
   texlua ctanbib <package name>
 
   This command will bibtex entry to the terminal output
   ]]
+  os.exit(1)
+elseif arg[1]=="--version" or arg[1]=="-v" then
+  print "ctanbib version {{version}}"
   os.exit(1)
 end
 
