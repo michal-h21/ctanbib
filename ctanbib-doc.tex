@@ -1,5 +1,9 @@
 \documentclass{ltxdoc}
 \newcommand\package[1]{\texttt{#1}}
+\usepackage{longtable}
+\usepackage{tabularx}
+\newenvironment{changelog}{\longtable{@{} l p{30em}}}{\endlongtable}
+\newcommand\change[2]{#1 & #2\\}
 \title{The \texttt{ctanbib} package}
 \author{Michal Hoftich}
 \date{\gitdate, version \gitversion}
@@ -14,7 +18,15 @@
 \section{Introduction}
 This package provides script named \package{ctanbib} which can be used for retrieving of the bibliographic information for packages hosted on CTAN.
 
+\section{Usage}
+
+
 It can be used in the following way:
+
+
+\noindent\package{ctanbib $\langle$packagename$\rangle$ > filename.bib}
+
+\section{Example}
 
 \begin{verbatim}
 ctanbib latex  
@@ -36,7 +48,16 @@ version = {PL 5}
 
 \section{License}
 
+Permission is granted to copy, distribute and/or modify this software
+under the terms of the LaTeX Project Public License, version 1.3.
+
 \section{Changelog}
+
+\begin{changelog}
+  \change{2018-08-21}{Rewrote the script to use the DOM api provided by LuaXML. This provides greater flexibility in the XML processing.}
+  \change{2018-08-20}{Fixed the script for the current XML format provided by CTAN}
+  \change{2014-09-12}{Initial version of the script have been released in answer on TeX.sx\footnote{\url{https://tex.stackexchange.com/a/200856/2891}}.}
+\end{changelog}
 
 
 \end{document}
