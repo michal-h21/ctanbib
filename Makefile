@@ -5,7 +5,7 @@ package_dist=${build_dir}/${package_name}
 dist_package=${package_name}.zip
 documentation_pdf=${package_name}-doc.pdf
 documentation_src=${package_name}-doc.tex
-dist_files=ctanbib ${documentation_pdf} README.md
+dist_files=ctanbib ${documentation_pdf} ${documentation_src} README.md
 
 ifeq ($(strip $(shell git rev-parse --is-inside-work-tree 2>/dev/null)),true)
 	VERSION:= $(shell git --no-pager describe --abbrev=0 --tags --always )
