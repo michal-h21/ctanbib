@@ -19,7 +19,7 @@ all: ${documentation_pdf}
 ${documentation_pdf}: ${documentation_src} Makefile
 	lualatex  "\def\gitversion{${VERSION}}\def\gitdate{${DATE}}\input{$<}"
 
-build:
+build: ${documentation_pdf}
 	rm -rf ${build_dir} 
 	mkdir -p ${package_dist}
 	cp ${dist_files} ${package_dist}
