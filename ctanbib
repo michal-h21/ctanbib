@@ -99,6 +99,8 @@ end
 
 local ctan_url = function(record)
   local ctan = record:query_selector("ctan")[1] 
+  -- some package don't contain the CTAN path
+  if not ctan then return get_url(record) end
   local path = ctan:get_attribute("path")
   return path
 end
