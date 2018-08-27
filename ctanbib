@@ -3,17 +3,23 @@ kpse.set_program_name("luatex")
 -- ctanbib.lua -- export ctan entries to bib format
 --
 
+local bibtype = "manual"
 if #arg < 1 or arg[1]=="--help" or arg[1]=="-h" then
-  print [[ctanbib - convert ctan package information to bibtex format
-  Usage:
-  texlua ctanbib <package name>
-
-  This command will bibtex entry to the terminal output
-  ]]
+  print([[ctanbib - convert ctan package information to bibtex format
+Usage:
+ctanbib [options] <package name>
+Available options:
+  -c,--ctan       Use @ctan type instead of @manual
+  -h,--help       Print this message
+  -v,--version    Print version info
+  ]])
   os.exit(1)
 elseif arg[1]=="--version" or arg[1]=="-v" then
   print "ctanbib version {{version}}"
   os.exit(1)
+elseif arg[1]=="--ctan" or arg[1]=="-c" then
+  table.remove(arg, 1)
+  bibtype = "ctan"
 end
 
 local pkgname = arg[1]
@@ -91,6 +97,12 @@ local get_version = function(record)
   end
 end
 
+local ctan_url = function(record)
+  local ctan = record:query_selector("ctan")[1] 
+  local path = ctan:get_attribute("path")
+  return path
+end
+
 local bibtex_escape = function(a)
   local a = a or ""
   return a:gsub("([%$%{%}])", function(x) return '\\'..x end)
@@ -119,9 +131,15 @@ e.package = pkgname
 e.title = get_title(record)
 e.subtitle = get_caption(record)
 e.url = get_url(record)
+-- use the CTAN path as url for the CTAN type
+if bibtype == "ctan" then
+  e.url = ctan_url(record)
+end
 e.version, e.date = get_version(record)
 e.urldate = os.date("%Y-%m-%d")
 
 local result = compile(bibtexformat, e)
+-- update the bibliography type
+result = result:gsub("^@manual", "@" .. bibtype)
 
 print(result)
