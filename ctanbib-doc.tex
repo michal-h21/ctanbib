@@ -24,13 +24,24 @@ This package provides script named \package{ctanbib} which can be used for retri
 It can be used in the following way:
 
 
-\noindent\package{ctanbib $\langle$packagename$\rangle$ > filename.bib}
+\noindent\package{ctanbib [options]  $\langle$packagename$\rangle$ > filename.bib}
 
-\section{Example}
+
+\section{Available options}
+
+\begin{description}
+  \item[-c,-\/-ctan] use @ctan type instead of @manual. The difference between the two is that the url field contains package CTAN path, instead of link to the package.
+  \item[-h,-\/-help] print the help message.
+  \item[-v,-\/-version] print the version info.
+\end{description}
+
+
+\section{Examples}
 
 \begin{verbatim}
 ctanbib latex  
 \end{verbatim}
+
 
 \noindent This invocation will print data in the Bib\LaTeX\ format to the standard output:
 
@@ -45,6 +56,27 @@ date = {2018-04-01},
 version = {PL 5}
 }
 \end{verbatim}
+
+The \texttt{--ctan} option:
+
+\begin{verbatim}
+ctanbib -c hyperref
+\end{verbatim}
+
+\noindent This produces bib record with the \texttt{@ctan} type:
+
+\begin{verbatim}
+@ctan{hyperref,
+title = {The Hyperref package},
+subtitle = {Extensive support for hypertext in LaTeX},
+author = {Rahtz, Sebastian and Oberdiek, Heiko},
+url = {/macros/latex/contrib/hyperref},
+urldate = {2018-08-27}, 
+date = {},
+version = {6.86b}
+}
+\end{verbatim}
+
 
 \section{License}
 
@@ -61,6 +93,7 @@ it's eventual release on CTAN.
 \section{Changelog}
 
 \begin{changelog}
+  \change{2018-08-27}{Added --ctan option}
   \change{2018-08-23}{Version 0.1 released.}
   \change{2018-08-23}{Created documentation.}
   \change{2018-08-21}{Rewrote the script to use the DOM api provided by LuaXML. This provides greater flexibility in the XML processing.}
