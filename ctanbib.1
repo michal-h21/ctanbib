@@ -1,0 +1,72 @@
+.\" Manpage for ctanbib.
+.\" Contact michal.h21@gmail.com to correct errors or typos.
+.TH ctanbib 1 "28 aug 2018" "0.1" "ctanbib man page"
+.SH NAME
+ctanbib
+\- retrieve bibliographic information for packages hosted on CTAN.
+.SH SYNOPSIS
+ctanbib <options> [package name]
+.SH DESCRIPTION
+This command can retrieve bibliographic information for TeX packages hosted on
+CTAN in the BibTeX format.
+.SH OPTIONS
+.IP -c,--ctan 
+use @ctan type instead of @manual. The difference between the two is that the
+url field contains package CTAN path, instead of link to the package.
+.IP -h,--help 
+print the help message.
+.IP -v,--version 
+print the version info.
+.SH EXAMPLES
+
+$ ctanbib latex  
+
+.Pp 
+This invocation will print data in the Bib\LaTeX\ format to the standard output:
+
+.nf
+\f[c]
+@manual{latex,
+title = {The Latex package},
+subtitle = {A TeX macro package that defines LaTeX},
+author = {Lamport, Leslie and The LaTeX Team},
+url = {http://www.latex-project.org/},
+urldate = {2018-08-23}, 
+date = {2018-04-01},
+version = {PL 5}
+}
+\f[]
+.fi
+
+.Pp
+The --ctan option:
+
+$ ctanbib -c hyperref
+
+.Pp
+This produces bib record with the @ctan type:
+
+.nf
+\f[c]
+@ctan{hyperref,
+title = {The Hyperref package},
+subtitle = {Extensive support for hypertext in LaTeX},
+author = {Rahtz, Sebastian and Oberdiek, Heiko},
+url = {/macros/latex/contrib/hyperref},
+urldate = {2018-08-27}, 
+date = {},
+version = {6.86b}
+}
+\f[]
+.fi
+
+.SH See also
+See ctanbib-doc.pdf for more details
+.SH BUGS
+No known bugs.
+.SH AUTHOR
+Michal Hoftich (michal.h21@gmail.com)
+.SH LICENSE
+Permission is granted to copy, distribute and/or modify this software
+under the terms of the LaTeX Project Public License, version 1.3.
+
