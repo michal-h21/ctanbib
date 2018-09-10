@@ -73,7 +73,12 @@ local get_authors = function(a)
     local current = {}
     current[#current+1] = author:get_attribute("familyname")
     current[#current+1] = author:get_attribute("givenname")
-    table.insert(retrieved_authors, table.concat(current, ", "))
+    -- the author is an organization
+    if #current == 1 then
+      table.insert(retrieved_authors, "{" .. current[1] .. "}")
+    else
+      table.insert(retrieved_authors, table.concat(current, ", "))
+    end
   end
   return table.concat(retrieved_authors," and ")
 end
