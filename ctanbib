@@ -67,6 +67,14 @@ local load_xml =  function(url)
   return dom.parse(info)
 end
 
+local bibtex_escape = function(a)
+  local a = a or ""
+  return a:gsub("([%$%{%}%\\])", function(x) 
+    if x == "\\" then return "\\textbackslash  " end
+    return '\\'..x 
+  end)
+end
+
 local get_authors = function(a)
   local retrieved_authors = {}
   for _, author in ipairs(a) do
@@ -91,7 +99,7 @@ local get_title = function(record)
   else
     title = pkgname
   end
-  return string.format(titleformat, title)
+  return string.format(titleformat, bibtex_escape(title))
 end
 
 
@@ -103,7 +111,7 @@ end
 
 local get_caption = function(record)
   local caption = record:query_selector("caption")[1]
-  if caption then return caption:get_text() end
+  if caption then return bibtex_escape(caption:get_text()) end
   return nil
 end
 
@@ -122,14 +130,10 @@ local ctan_url = function(record)
   return path
 end
 
-local bibtex_escape = function(a)
-  local a = a or ""
-  return a:gsub("([%$%{%}])", function(x) return '\\'..x end)
-end
 
 local compile = function(template, records)
   return template:gsub("$([a-z]+)", function(a) 
-    return bibtex_escape(records[a]) or ""
+    return records[a] or ""
   end)
 end
 
