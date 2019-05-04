@@ -27,7 +27,7 @@ It can be used in the following way:
 
 \noindent\package{ctanbib [options]  $\langle$packagename$\rangle$ > filename.bib}
 
-The \texttt{wget} utility needs to be installed on the user's system in order to support the package info download.
+The \texttt{curl} utility needs to be installed on the user's system in order to support the package info download.
 
 
 \section{Available options}
@@ -99,7 +99,8 @@ it's eventual release on CTAN.
 \section{Changelog}
 
 \begin{changelog}
-  \change{2019-05-04}{Added information about the need to have the \texttt{wget} command installed}
+  \change{2019-05-04}{Use the \texttt{curl} command to download the package info}
+  \change{2019-05-04}{Added information about the need to have the \texttt{curl} command installed}
   \change{2019-03-11}{Version 0.1b released}
   \change{2018-09-10}{Added support for institutional names}
   \change{2018-09-10}{Escape TeX commands in the title and subtitle}
