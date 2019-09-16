@@ -35,7 +35,7 @@ elseif arg[1]=="--ctan" or arg[1]=="-c" then
 end
 
 local pkgname = arg[1]
-local url = "https://www.ctan.org/xml/pkg/" .. pkgname
+local url = "https://www.ctan.org/xml/2.0/pkg/" .. pkgname .. "?author-name=true"
 
 -- change that for different title scheme
 local titleformat = "The %s package"
