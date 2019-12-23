@@ -25,10 +25,10 @@ Available options:
   -h,--help       Print this message
   -v,--version    Print version info
   ]])
-  os.exit(1)
+  os.exit(0)
 elseif arg[1]=="--version" or arg[1]=="-v" then
   print "ctanbib version {{version}}"
-  os.exit(1)
+  os.exit(0)
 elseif arg[1]=="--ctan" or arg[1]=="-c" then
   table.remove(arg, 1)
   bibtype = "ctan"
