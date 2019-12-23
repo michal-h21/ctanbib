@@ -35,6 +35,12 @@ elseif arg[1]=="--ctan" or arg[1]=="-c" then
 end
 
 local pkgname = arg[1]
+
+if not pkgname then 
+  print "[ctanbib] Error: missing package name"
+  os.exit(1)
+end
+
 local url = "https://www.ctan.org/xml/2.0/pkg/" .. pkgname .. "?author-name=true"
 local authors_url = "https://ctan.org/xml/2.0/authors"
 
