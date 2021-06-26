@@ -153,6 +153,12 @@ local get_title = function(record)
   return string.format(titleformat, bibtex_escape(title))
 end
 
+local function verify_record(record)
+  -- verify that we found a package
+  if not record then return false end
+  return #record:query_selector("name") > 0
+end
+
 
 local get_url = function(record)
   local home = record:query_selector("home")[1]
@@ -189,9 +195,9 @@ for _, pkgname in ipairs(args) do
   local record, info = load_xml(url)
   print(info)
 
-  if not record then
-    print("Cannot find entry for package "..pkgname)
-    os.exit(1)
+  if not verify_record(record) then
+    print("% Cannot find entry for package "..pkgname)
+    break
   end
 
   -- root element is also saved, so we use this trick 
