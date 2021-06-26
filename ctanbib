@@ -15,6 +15,8 @@ kpse.set_program_name("luatex")
 -- 
 -- The Current Maintainer of this work is Michal Hoftich
 
+local lapp = require "make4ht-lapp"
+
 local bibtype = "manual"
 local pkgurl = false
 if #arg < 1 or arg[1]=="--help" or arg[1]=="-h" then
@@ -49,6 +51,7 @@ end
 
 local url = "https://ctan.org/xml/2.0/pkg/" .. pkgname .. "?author-name=true"
 local authors_url = "https://ctan.org/xml/2.0/authors"
+local license_url = "http://www.ctan.org/xml/2.0/licenses"
 
 -- change that for different title scheme
 local titleformat = "The %s package"
@@ -61,7 +64,7 @@ author = {$author},
 url = {$url},
 urldate = {$urldate}, 
 date = {$date},
-version = {$version}
+version = {$version},
 }
 ]]
 
@@ -73,6 +76,7 @@ local load_xml =  function(url)
 
   local info = command:read("*all")
   command:close()
+  print(info)
 
   if string.len(info) == 0 then
     return false
@@ -170,11 +174,7 @@ local get_version = function(record)
 end
 
 local ctan_url = function(record)
-  local ctan = record:query_selector("ctan")[1] 
-  -- some package don't contain the CTAN path
-  if not ctan then return get_url(record) end
-  local path = ctan:get_attribute("path")
-  return path
+  return "https://ctan.org/pkg/"..pkgname
 end
 
 
