@@ -163,8 +163,7 @@ local function verify_record(record)
   return #record:query_selector("name") > 0
 end
 
-
-local get_url = function(record)
+local get_url = function(record,pkgname)
   local home = record:query_selector("home")[1]
   if home then return home:get_attribute("href") end
   return "https://ctan.org/pkg/"..pkgname
@@ -183,7 +182,7 @@ local get_version = function(record)
   end
 end
 
-local ctan_url = function(record)
+local ctan_url = function(record, pkgname)
   return "https://ctan.org/pkg/"..pkgname
 end
 
@@ -197,7 +196,6 @@ end
 for _, pkgname in ipairs(args) do
   local url = "https://ctan.org/xml/2.0/pkg/" .. pkgname .. "?author-name=true"
   local record, info = load_xml(url)
-  print(info)
 
   if not verify_record(record) then
     print("% Cannot find entry for package "..pkgname)
@@ -213,10 +211,10 @@ for _, pkgname in ipairs(args) do
   e.package = pkgname
   e.title = get_title(record)
   e.subtitle = get_caption(record)
-  e.url = get_url(record)
+  e.url = get_url(record, pkgname)
   -- use the CTAN path as url for the CTAN type
-  if (bibtype == "ctan") and not pkgurl then
-    e.url = ctan_url(record)
+  if pkgurl then
+    e.url = ctan_url(record, pkgname)
   end
   e.version, e.date = get_version(record)
   e.urldate = os.date("%Y-%m-%d")
