@@ -1,7 +1,7 @@
 #!/usr/bin/env texlua
 kpse.set_program_name("luatex")
 -- ctanbib -- export ctan entries to bib format
--- Copyright: Michal Hoftich <michal.h21@gmail.com> (2014-2018)
+-- Copyright: Michal Hoftich <michal.h21@gmail.com> (2014-2021)
 --
 -- This work may be distributed and/or modified under the
 -- conditions of the LaTeX Project Public License, either version 1.3
