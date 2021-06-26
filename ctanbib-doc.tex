@@ -25,7 +25,7 @@ This package provides script named \package{ctanbib} which can be used for retri
 It can be used in the following way:
 
 
-\noindent\package{ctanbib [options]  $\langle$packagename$\rangle$ > filename.bib}
+\noindent\package{ctanbib [options]  $\langle$packagename1$\rangle$ \ldots $\langle$packagenameX$\rangle$ > filename.bib}
 
 The \texttt{curl} utility needs to be installed on the user's system in order to support the package info download.
 
@@ -33,10 +33,8 @@ The \texttt{curl} utility needs to be installed on the user's system in order to
 \section{Available options}
 
 \begin{description}
-  \item[-c,-\/-ctan] use the \texttt{@ctan} type instead of \texttt{@manual}.
-    The difference between the two is that the url field contains packages CTAN
-    path, instead of a link to the package.
-  \item[-C,-\/-CTAN] like \verb|--ctan| option, but use original url instead of CTAN path.
+  \item[-c,-\/-ctan] use the CTAN package entry as package URL instead of URL provided by the package.
+  \item[-e,-\/-entrypoint] explicitly set the Bib\TeX\ entry type.
   \item[-h,-\/-help] print the help message.
   \item[-v,-\/-version] print the version info.
 \end{description}
@@ -55,31 +53,44 @@ ctanbib latex
 @manual{latex,
 title = {The Latex package},
 subtitle = {A TeX macro package that defines LaTeX},
-author = {Lamport, Leslie and The LaTeX Team},
+author = {{The LaTeX Team} and Lamport, Leslie},
 url = {http://www.latex-project.org/},
-urldate = {2018-08-23}, 
-date = {2018-04-01},
-version = {PL 5}
+urldate = {2021-06-26},
+date = {},
+version = {2021-06-01},
 }
 \end{verbatim}
 
-The \texttt{--ctan} option:
+\noindent The \texttt{--ctan} option:
 
 \begin{verbatim}
-ctanbib -c hyperref
+ctanbib -c latex
 \end{verbatim}
 
-\noindent This produces a bib record with the \texttt{@ctan} type:
+\noindent This produces a bib record that uses the CTAN package entry for the URL, 
+instead of the original package URL.
+
 
 \begin{verbatim}
-@ctan{hyperref,
-title = {The Hyperref package},
-subtitle = {Extensive support for hypertext in LaTeX},
-author = {Rahtz, Sebastian and Oberdiek, Heiko},
-url = {/macros/latex/contrib/hyperref},
-urldate = {2018-08-27}, 
-date = {},
-version = {6.86b}
+@manual{latex,
+title = {The Latex package},
+...
+url = {https://ctan.org/pkg/latex},
+...
+}
+\end{verbatim}
+
+\noindent The \texttt{--entrytype} option:
+
+\begin{verbatim}
+ctanbib -e ctan latex
+\end{verbatim}
+
+\noindent It selects different entry type for the record:
+
+\begin{verbatim}
+@ctan{latex,
+...
 }
 \end{verbatim}
 
@@ -100,6 +111,11 @@ it's eventual release on CTAN. Herbert Voss added the \verb|--CTAN| option.
 \section{Changelog}
 
 \begin{changelog}
+  \change{2021-06-26}{Added \verb|--entrytype| option for explicit specification of the Bib\TeX\ entry type}
+  \change{2021-06-26}{Fixed package name verification}
+  \change{2021-06-26}{Added support for multiple package names}
+  \change{2021-06-26}{Print \verb|https://www.ctan.org/pkg/<pkgname>| with the \texttt{-c} option}
+  \change{2021-06-20}{Version 0.1e released}
   \change{2021-06-20}{Added \verb|--CTAN| option, thanks to Herbert Voss}
   \change{2019-12-23}{Don't return non-zero exit codes for non-error runs}
   \change{2019-12-23}{Test for the packagename with the \texttt{-c} option}
