@@ -38,6 +38,7 @@ The \texttt{curl} utility needs to be installed on the user's system in order to
 
 \begin{description}
   \item[-c,-\/-ctan] use the CTAN package entry as package URL instead of URL provided by the package.
+  \item[-C,-\/-ctanpath]   use package's CTAN path as URL
   \item[-e,-\/-entrypoint] explicitly set the Bib\TeX\ entry type.
   \item[-h,-\/-help] print the help message.
   \item[-v,-\/-version] print the version info.
@@ -84,6 +85,24 @@ url = {https://ctan.org/pkg/latex},
 }
 \end{verbatim}
 
+\noindent The \texttt{--ctanpath} option:
+
+\begin{verbatim}
+ctanbib -C biblatex
+\end{verbatim}
+
+\noindent This produces a bib record that uses the CTAN package tree location for the URL.
+
+\begin{verbatim}
+@manual{biblatex,
+...
+url = {/macros/latex/contrib/biblatex},
+...
+}
+\end{verbatim}
+
+
+
 \noindent The \texttt{--entrytype} option:
 
 \begin{verbatim}
@@ -115,6 +134,7 @@ it's eventual release on CTAN. Herbert Voss added the \verb|--CTAN| option.
 \section{Changelog}
 
 \begin{changelog}
+  \change{2021-06-29}{Added the \verb|--ctanpath| option.}
   \change{2021-06-26}{Version 0.2 released}
   \change{2021-06-26}{Removed the \verb|--CTAN| option, entry type can be set using \verb|--entrytype| and CTAN URL is requested using \verb|--ctan|}
   \change{2021-06-26}{Added \verb|--entrytype| option for explicit specification of the Bib\TeX\ entry type}
