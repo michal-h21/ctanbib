@@ -5,7 +5,7 @@
 \newenvironment{changelog}{\longtable{@{} l p{30em}}}{\endlongtable}
 \newcommand\change[2]{#1 & #2\\}
 \title{The \texttt{ctanbib} package}
-\author{Michal Hoftich\\\url{michal.h21@gmail.com}}
+\author{Michal Hoftich\\\href{mailto:michal.h21@gmail.com}{michal.h21@gmail.com}}
 \date{\gitdate, version \gitversion}
 \usepackage{hyperref}
 \usepackage{fontspec}
@@ -134,6 +134,7 @@ it's eventual release on CTAN. Herbert Voss added the \verb|--CTAN| option.
 \section{Changelog}
 
 \begin{changelog}
+  \change{2023-02-20}{Fixed link to the author mail address}
   \change{2021-06-29}{Version 0.2a released}
   \change{2021-06-29}{Added the \verb|--ctanpath| option.}
   \change{2021-06-26}{Version 0.2 released}
