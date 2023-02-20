@@ -78,7 +78,7 @@ local dom = require('luaxml-domobject')
 
 local load_xml =  function(url)
   -- local command = io.popen("wget -qO- ".. url,"r")
-  local command = io.popen("curl -sS ".. url,"r")
+  local command = io.popen("curl --ssl-no-revoke -sS ".. url,"r")
 
   local info = command:read("*all")
   command:close()
