@@ -27,6 +27,7 @@ Available options:
   -C,--ctanpath   Use package's CTAN path as URL
   -e,--entrytype  (default manual)  Change entry type
   -h,--help       Print this message
+  -t,--tugboat    Create record suitable for the TUGboat journal
   -v,--version    Print version info
   ]]
 local args = lapp(msg)
@@ -73,6 +74,13 @@ date = {$date},
 version = {$version},
 }
 ]]
+
+if args.tugboat then
+  titleformat = "The \\ctanbibpkgname{%s} package"
+  preamble = [[@preamble{ "\providecommand\ctanbibpkgname[1]{\textsl{#1}}" }
+]] 
+  bibtexformat = preamble .. bibtexformat
+end
 
 local dom = require('luaxml-domobject')
 
@@ -158,7 +166,8 @@ local get_title = function(record)
   local title = record:query_selector("name")[1]
   if title then
     title = title:get_text()
-    title = title:gsub("^(.)", function(a) return unicode.utf8.upper(a) end)
+    -- don't uppercase package name, as suggested by Karl Berry and Boris Veytsman
+    -- title = title:gsub("^(.)", function(a) return unicode.utf8.upper(a) end)
   else
     title = pkgname
   end
