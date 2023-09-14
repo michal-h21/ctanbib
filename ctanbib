@@ -27,7 +27,7 @@ Available options:
   -C,--ctanpath   Use package's CTAN path as URL
   -e,--entrytype  (default manual)  Change entry type
   -h,--help       Print this message
-  -t,--tugboat    Create record suitable for the TUGboat journal
+  -p,--pkgname    Put the package name in a \ctanbibpkgname command
   -v,--version    Print version info
   ]]
 local args = lapp(msg)
@@ -75,7 +75,7 @@ version = {$version},
 }
 ]]
 
-if args.tugboat then
+if args.pkgname then
   titleformat = "The \\ctanbibpkgname{%s} package"
   preamble = [[@preamble{ "\providecommand\ctanbibpkgname[1]{\textsl{#1}}" }
 ]] 

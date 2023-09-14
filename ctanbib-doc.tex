@@ -41,7 +41,7 @@ The \texttt{curl} utility needs to be installed on the user's system in order to
   \item[-C,-\/-ctanpath]   use package's CTAN path as URL
   \item[-e,-\/-entrypoint] explicitly set the Bib\TeX\ entry type.
   \item[-h,-\/-help] print the help message.
-  \item[-t,-\/-tugboat] create record suitable for the TUGboat journal.
+  \item[-p,-\/-pkgname] Put the package name in a \verb|\ctanbibpkgname| command.
   \item[-v,-\/-version] print the version info.
 \end{description}
 
@@ -57,7 +57,7 @@ ctanbib latex
 
 \begin{verbatim}
 @manual{latex,
-title = {The Latex package},
+title = {The latex package},
 subtitle = {A TeX macro package that defines LaTeX},
 author = {{The LaTeX Team} and Lamport, Leslie},
 url = {http://www.latex-project.org/},
@@ -79,7 +79,7 @@ instead of the original package URL.
 
 \begin{verbatim}
 @manual{latex,
-title = {The Latex package},
+title = {The latex package},
 ...
 url = {https://ctan.org/pkg/latex},
 ...
@@ -118,6 +118,23 @@ ctanbib -e ctan latex
 }
 \end{verbatim}
 
+\noindent The \texttt{--pkgname} option:
+
+\begin{verbatim}
+ctanbib -p latex
+\end{verbatim}
+
+\noindent Puts the package name into the \verb|\ctanbibpkgname| command, which can be
+redefined by user to produce a special formatting of the name:
+
+\begin{verbatim}
+@preamble{ "\providecommand\ctanbibpkgname[1]{\textsl{#1}}" }
+@manual{latex,
+  title = {The \ctanbibpkgname{latex} package},
+  ...
+}
+\end{verbatim}
+
 
 \section{License}
 
@@ -130,13 +147,14 @@ This package was created thanks to TeX.sx user
 Daniel\footnote{\url{https://tex.stackexchange.com/users/3751/daniel}}. Lukas
 C.~Bossert had useful comments which led to update of the original script and
 it's eventual release on CTAN. Herbert Voss added the \verb|--CTAN| option.
-Karl Berry and Boris Veytsman suggested addition of the \verb|--tugboat| option 
+Karl Berry and Boris Veytsman suggested addition of the \verb|--pkgname| option 
 and leaving package names uncapitalized.
 
 \newpage
 \section{Changelog}
 
 \begin{changelog}
+  \change{2023-09-14}{Renamed the \verb|--tugboat| option to \verb|--pkgname|}
   \change{2023-09-12}{Don't capitalize package names}
   \change{2023-09-12}{Added the \verb|--tugboat| option for creation of records suitable for the TUGboat journal}
   \change{2023-02-20}{Verson 0.2b released}
