@@ -10,7 +10,7 @@ This script can generate BibTeX records for LaTeX packages hosted on CTAN.
 More details can be found on [TeX.sx](https://tex.stackexchange.com/a/200856/2891)
 
 
-Copyright: 2021-2023 Michal Hoftich
+Copyright: 2014–2023 Michal Hoftich
 
 This work may be distributed and/or modified under the
 conditions of the LaTeX Project Public License, either version 1.3
