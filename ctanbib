@@ -199,6 +199,21 @@ local get_version = function(record)
   end
 end
 
+
+local get_copyright_date = function(record)
+  local copyright = record:query_selector("copyright")[1]
+  if copyright  then
+    local year = copyright:get_attribute("year") 
+    if year then
+      -- year can hold a range of year. we will chose the newest date
+      return year:match("(%d+)$")
+    end
+
+  end
+  
+end
+
+
 local ctan_url = function(record, pkgname)
   return "https://ctan.org/pkg/"..pkgname
 end
@@ -244,6 +259,9 @@ for _, pkgname in ipairs(args) do
     e.url = ctan_path(record)
   end
   e.version, e.date = get_version(record)
+  if not e.date then 
+    e.date = get_copyright_date(record)
+  end
   e.urldate = os.date("%Y-%m-%d")
 
   local result = compile(bibtexformat, e)
