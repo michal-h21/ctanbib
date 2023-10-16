@@ -1,4 +1,4 @@
-\documentclass{ltxdoc}
+\documentclass[11pt]{ltxdoc}
 \newcommand\package[1]{\texttt{#1}}
 \usepackage{longtable}
 \usepackage{tabularx}
@@ -53,17 +53,17 @@ ctanbib latex
 \end{verbatim}
 
 
-\noindent This invocation will print data in the Bib\LaTeX\ format to the standard output:
+\noindent This invocation will print data in the Bib(La)\TeX\ format to the standard output:
 
 \begin{verbatim}
 @manual{latex,
-title = {The latex package},
-subtitle = {A TeX macro package that defines LaTeX},
-author = {{The LaTeX Team} and Lamport, Leslie},
-url = {http://www.latex-project.org/},
-urldate = {2021-06-26},
-date = {},
-version = {2021-06-01},
+  title = {The latex package},
+  subtitle = {A TeX macro package that defines LaTeX},
+  author = {{The LaTeX Team} and Lamport, Leslie},
+  url = {http://www.latex-project.org/},
+  urldate = {2021-06-26},
+  date = {},
+  version = {2021-06-01},
 }
 \end{verbatim}
 
@@ -79,10 +79,10 @@ instead of the original package URL.
 
 \begin{verbatim}
 @manual{latex,
-title = {The latex package},
-...
-url = {https://ctan.org/pkg/latex},
-...
+  title = {The latex package},
+  ...
+  url = {https://ctan.org/pkg/latex},
+  ...
 }
 \end{verbatim}
 
@@ -96,9 +96,9 @@ ctanbib -C biblatex
 
 \begin{verbatim}
 @manual{biblatex,
-...
-url = {/macros/latex/contrib/biblatex},
-...
+  ...
+  url = {/macros/latex/contrib/biblatex},
+  ...
 }
 \end{verbatim}
 
@@ -114,7 +114,7 @@ ctanbib -e ctan latex
 
 \begin{verbatim}
 @ctan{latex,
-...
+  ...
 }
 \end{verbatim}
 
@@ -154,6 +154,8 @@ and leaving package names uncapitalized.
 \section{Changelog}
 
 \begin{changelog}
+  \change{2023-10-16}{Use larger font in the documentation}
+  \change{2023-10-16}{Indent the Bib\TeX\ entry by two spaces}
   \change{2023-10-08}{Get date from the copyright field if we cannot retrieve it from version}
   \change{2023-09-18}{Version 0.2c released}
   \change{2023-09-14}{Renamed the \verb|--tugboat| option to \verb|--pkgname|}
