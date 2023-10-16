@@ -65,13 +65,13 @@ local titleformat = "The %s package"
 
 local bibtexformat = [[
 @manual{$package,
-title = {$title},
-subtitle = {$subtitle},
-author = {$author},
-url = {$url},
-urldate = {$urldate}, 
-date = {$date},
-version = {$version},
+  title = {$title},
+  subtitle = {$subtitle},
+  author = {$author},
+  url = {$url},
+  urldate = {$urldate}, 
+  date = {$date},
+  version = {$version},
 }
 ]]
 
