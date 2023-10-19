@@ -208,7 +208,9 @@ end
 
 
 local get_copyright_date = function(record)
-  local copyright = record:query_selector("copyright")[1]
+  -- we must get the latest <copyright>, because it contains the latest date
+  local copyright_tbl = record:query_selector("copyright")
+  local copyright = copyright_tbl[#copyright_tbl]
   if copyright  then
     local year = copyright:get_attribute("year") 
     if year then
