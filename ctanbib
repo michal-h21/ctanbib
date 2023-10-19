@@ -58,7 +58,7 @@ if not pkgname then
 end
 
 local authors_url = "https://ctan.org/xml/2.0/authors"
-local license_url = "http://www.ctan.org/xml/2.0/licenses"
+local license_url = "https://www.ctan.org/xml/2.0/licenses"
 
 -- change that for different title scheme
 local titleformat = "The %s package"
