@@ -21,7 +21,12 @@ local bibtype = "manual"
 local pkgurl = false
 local msg = [[ctanbib - convert ctan package information to bibtex format
 Usage:
-ctanbib [options] name1 name2 ...
+ctanbib [options] PKGNAME1 PKGNAME2 ...
+
+Look up the Catalogue entry for each PKGNAME on CTAN (at
+https://ctan.org/xml/2.0/pkg/PKGNAME), and convert relevant information
+to a BibTeX entry.
+
 Available options:
   -c,--ctan       Use CTAN URL instead of the package homepage 
   -C,--ctanpath   Use package's CTAN path as URL
@@ -29,6 +34,8 @@ Available options:
   -h,--help       Print this message
   -p,--pkgname    Put the package name in a \ctanbibpkgname command
   -v,--version    Print version info
+
+ctanbib package page: https://ctan.org/pkg/ctanbib
   ]]
 local args = lapp(msg)
 if args.help then
