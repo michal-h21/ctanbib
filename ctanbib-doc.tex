@@ -18,6 +18,13 @@
 \section{Introduction}
 This package provides script named \package{ctanbib} which can be used for retrieving of the bibliographic information for packages hosted on CTAN.
 
+It looks up the Catalogue entry for each PKGNAME on CTAN (at
+\url{https://ctan.org/xml/2.0/pkg/PKGNAME}), and convert relevant information
+to a BibTeX entry.
+
+By default, the url field in the output entry is the package's home
+field value if that is specified in the Catalogue entry; if it isn't,
+\url{https://ctan.org/pkg/PKGNAME is used}.
 
 \section{Usage}
 
@@ -37,11 +44,11 @@ The \texttt{curl} utility needs to be installed on the user's system in order to
 \section{Available options}
 
 \begin{description}
-  \item[-c,-\/-ctan] use the CTAN package entry as package URL instead of URL provided by the package.
-  \item[-C,-\/-ctanpath]   use package's CTAN path as URL
+  \item[-c,-\/-ctan] always use CTAN /pkg/ url instead of the package homepage 
+  \item[-C,-\/-ctanpath] use the package's CTAN path as url (e.g.: /support/ctanbib)
   \item[-e,-\/-entrypoint] explicitly set the Bib\TeX\ entry type.
   \item[-h,-\/-help] print the help message.
-  \item[-p,-\/-pkgname] Put the package name in a \verb|\ctanbibpkgname| command.
+  \item[-p,-\/-pkgname] wrap the package name in a \verb|\ctanbibpkgname| command.
   \item[-v,-\/-version] print the version info.
 \end{description}
 

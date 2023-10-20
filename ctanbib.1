@@ -9,17 +9,28 @@ ctanbib <options> [package name]
 .SH DESCRIPTION
 This command can retrieve bibliographic information for TeX packages hosted on
 CTAN in the BibTeX format.
+
+
+Look up the Catalogue entry for each PKGNAME on CTAN (at
+https://ctan.org/xml/2.0/pkg/PKGNAME), and convert relevant information
+to a BibTeX entry.
+
+By default, the url field in the output entry is the package's home
+field value if that is specified in the Catalogue entry; if it isn't,
+https://ctan.org/pkg/PKGNAME is used.
+
 .SH OPTIONS
 .IP -c,--ctan 
-use @ctan type instead of @manual. The difference between the two is that the
-url field contains package CTAN path, instead of link to the package.
+Always use CTAN /pkg/ url instead of the package homepage 
 .IP -C,--CTAN 
-like --ctan option, but use original url instead of CTAN path.
+Use the package's CTAN path as url (e.g.: /support/ctanbib)
+.IP -e,--entrytype 
+(default manual)  Change entry type
 .IP -h,--help 
 print the help message.
 .IP -p,--pkgname
-put the package name in a \ctanbibpkgname command. This command can be
-redefined in the document for the desired formatting.
+Wrap the package name in a \ctanbibpkgname command
+This command can be redefined in the document for the desired formatting.
 .IP -v,--version 
 print the version info.
 .SH EXAMPLES
