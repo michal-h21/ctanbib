@@ -166,6 +166,10 @@ local get_authors = function(a)
   for _, author in ipairs(a) do
     table.insert(retrieved_authors, get_author(author))
   end
+  -- CTAN returns authors in the random order. to fix that, we sort them. 
+  -- I know that it is not a good solution for non-latin and accented names.
+  -- We could use Lua-UCA for the sorting, but I feel it is a bit of overkill.
+  table.sort(retrieved_authors)
   return table.concat(retrieved_authors," and ")
 end
 
