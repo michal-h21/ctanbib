@@ -267,8 +267,6 @@ for _, pkgname in ipairs(args) do
 
   local e = {}
 
-  print(record:serialize())
-
   e.author = get_authors(record:query_selector("authorref"))
   e.package = pkgname
   e.title = get_title(record)
