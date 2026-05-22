@@ -197,6 +197,10 @@ end
 local get_url = function(record,pkgname)
   local home = record:query_selector("home")[1]
   if home then return home:get_attribute("href") end
+  -- if there is no home field, we will try to find the repository field, because some packages don't have the home field, 
+  -- but they have the repository field, which is usually the same as home
+  home = record:query_selector("contact[type='repository']")[1]
+  if home then return home:get_attribute("href") end
   return "https://ctan.org/pkg/"..pkgname
 end
 
@@ -262,6 +266,8 @@ for _, pkgname in ipairs(args) do
   -- local record = entry.entry
 
   local e = {}
+
+  print(record:serialize())
 
   e.author = get_authors(record:query_selector("authorref"))
   e.package = pkgname
