@@ -6,6 +6,7 @@ dist_package=${package_name}.zip
 documentation_pdf=${package_name}-doc.pdf
 documentation_src=${package_name}-doc.tex
 manpage=${package_name}.1
+readme=README.md
 dist_files=ctanbib ${documentation_pdf} ${documentation_src} README.md  ${manpage}
 
 ifeq ($(strip $(shell git rev-parse --is-inside-work-tree 2>/dev/null)),true)
@@ -26,4 +27,6 @@ build: ${documentation_pdf}
 	mkdir -p ${package_dist}
 	cp ${dist_files} ${package_dist}
 	sed -e "s/{{version}}/${VERSION}/" ${package_name} | sed -e "s/{{year}}/${YEAR}/" >  ${package_dist}/${package_name}
+	sed -e "s/{{version}}/${VERSION}/" ${manpage} | sed -e "s/{{year}}/${YEAR}/"  | sed -e "s/{{date}}/${DATE}/" >  ${package_dist}/${manpage}
+	sed -e "s/{{version}}/${VERSION}/" ${readme} | sed -e "s/{{year}}/${YEAR}/" >  ${package_dist}/${readme}
 	cd ${build_dir} && zip -r ${dist_package} ${package_name}
