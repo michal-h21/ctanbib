@@ -5,12 +5,13 @@ This script can generate BibTeX records for LaTeX packages hosted on CTAN.
 
 ## Usage 
 
-    ctanbib graphicx
+    ctanbib graphicx > graphicx.bib
 
-More details can be found on [TeX.sx](https://tex.stackexchange.com/a/200856/2891)
+The development of this package was prompted by this question on [TeX.sx](https://tex.stackexchange.com/a/200856/2891).
+The documentation is available in the PDF format on [CTAN](https://ctan.org/pkg/ctanbib).
 
 
-Copyright: 2014–2023 Michal Hoftich
+Copyright: 2014–{{year}} Michal Hoftich
 
 This work may be distributed and/or modified under the
 conditions of the LaTeX Project Public License, either version 1.3
