@@ -130,7 +130,7 @@ Available options:
   -C,--ctanpath     Use the package's CTAN path as url (e.g.: /support/ctanbib)
   -e,--entrytype    (default manual)  Change entry type
   -h,--help         Print this message
-  -l,--labelformat  (default pgkname)  Change label format 
+  -l,--labelformat  (default pkgname)  Change label format 
   -o,--output       (default "") Write output to a file instead of stdout
   -p,--pkgname      Wrap the package name in a \ctanbibpkgname command
   -s,--separator    (default :)  Change label separator
