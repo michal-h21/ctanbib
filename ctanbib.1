@@ -2,54 +2,87 @@
 .\" Contact michal.h21@gmail.com to correct errors or typos.
 .TH CTANBIB 1 "{{date}}" "{{version}}" "ctanbib man page"
 .SH NAME
-ctanbib - retrieve bibliographic information for packages hosted on CTAN
+ctanbib - convert CTAN package information to BibTeX format
 .SH SYNOPSIS
 ctanbib [\fIoptions\fP] \fIpackage-name\fP ...
 .SH DESCRIPTION
-This command can retrieve bibliographic information for TeX packages hosted on
-CTAN in the BibTeX format.
-.PP
-Look up the Catalogue entry for each \fIpackage-name\fP on CTAN (at
-https://ctan.org/xml/2.0/pkg/\fIpackage-name\fP), and convert relevant
+This command looks up the Catalogue entry for each \fIpackage-name\fP on CTAN (at
+https://ctan.org/xml/2.0/pkg/\fIpackage-name\fP), and converts relevant
 information to a BibTeX entry.
 .PP
-By default, the url field in the output entry is the package's home
-field value if that is specified in the Catalogue entry; if it isn't, or
-if the --ctan option is given, https://ctan.org/pkg/\fIpackage-name\fP
-is used. Or, if the --CTAN option is given, the url field is the
-package's directory on CTAN (e.g., /macros/latex/contrib/hyperref).
+By default, the \fIurl\fP field in the output entry is the package's \fIhome\fP
+field value if that is specified in the Catalogue entry; if it isn't,
+https://ctan.org/pkg/\fIpackage-name\fP is used.
 
 .SH OPTIONS
-.IP -c,--ctan
-Always use CTAN /pkg/ url instead of the package homepage
-.IP -C,--CTAN
-Use the package's CTAN path as url (e.g.: /support/ctanbib)
-.IP -e,--entrytype
-(default manual)  Change entry type
-.IP -h,--help
-print the help message.
-.IP -p,--pkgname
-Wrap the package name in a \\ctanbibpkgname command.
+.TP
+\fB\-c, \-\-ctan\fP
+Always use the CTAN \fI/pkg/\fP URL instead of the package homepage.
+.TP
+\fB\-C, \-\-ctanpath\fP
+Use the package's CTAN path as the \fIurl\fP (e.g., \fI/support/ctanbib\fP).
+.TP
+\fB\-e, \-\-entrytype\fP \fItype\fP
+Change the BibTeX entry type. The default is \fImanual\fP.
+.TP
+\fB\-h, \-\-help\fP
+Print the help message.
+.TP
+\fB\-l, \-\-labelformat\fP \fIformat\fP
+Change the label format. The default is \fIpkgname\fP. See \fBLabel formats\fP.
+.TP
+\fB\-o, \-\-output\fP \fIfile\fP
+Write output to \fIfile\fP instead of standard output. The default is empty,
+i.e. write to standard output.
+.TP
+\fB\-p, \-\-pkgname\fP
+Wrap the package name in a \fB\\ctanbibpkgname\fP command.
 This command can be redefined in the document for the desired formatting.
-.IP -v,--version
-print the version info.
+.TP
+\fB\-s, \-\-separator\fP \fIseparator\fP
+Change the label separator. The default is a colon (\fI:\fP).
+.TP
+\fB\-v, \-\-version\fP
+Print version information.
+
+.SH LABEL FORMATS
+The following formats are available for \fB\-l, \-\-labelformat\fP:
+.TP
+\fIpkgname\fP
+Use the package name as the label.
+.TP
+\fIpkgname-version\fP
+Use the package name and version as the label. If the version is not
+available, use the package date instead.
+.TP
+\fIpkgname-date\fP
+Use the package name and date as the label.
+.TP
+\fIpkgname-date-version\fP
+Use the package name, date, and version as the label.
+.TP
+\fIpkgname-year\fP
+Use the package name and the year extracted from its date as the label.
+.TP
+\fIauthor-year\fP
+Use the package author and the year extracted from its date as the label.
+If the author is not available, use the package name instead.
 
 .SH EXAMPLES
-
 .EX
 ctanbib latex
 .EE
 .PP
-This minimal invocation will print data using conventional BibLaTeX
-fields to standard output:
+This minimal invocation will print data using conventional BibTeX fields to standard output:
 .EX
+
 @manual{latex,
-  title = {The latex package},
+  title = {The LaTeX package},
   subtitle = {A TeX macro package that defines LaTeX},
   author = {Lamport, Leslie and {The LaTeX Project Team}},
-  url = {http://www.latex-project.org/},
-  urldate = {2026-05-18}, 
-  date = {2025-11-01},
+  url = {https://www.latex-project.org/},
+  urldate = {2026-11-09},
+  date = {2026-11-01},
   version = {},
 }
 .EE
@@ -60,38 +93,48 @@ completely correct capitalization. \fBctanbib\fP works only from the
 to you.
 
 .PP
-With the --entrytype option:
+With the \fB\-\-entrytype\fP option:
 .EX
 ctanbib -e ctan hyperref
 .EE
 .PP
 This produces a bib record with the @ctan type:
 .EX
+
 @ctan{hyperref,
   title = {The hyperref package},
   subtitle = {Extensive support for hypertext in LaTeX},
-  author = {Oberdiek, Heiko and Rahtz, Sebastian
-    and {Oberdiek Package Support Group}
-    and {The LaTeX Project Team}},
+  author = {Oberdiek, Heiko 
+     and Rahtz, Sebastian 
+     and {The LaTeX Project Team}},
   url = {https://github.com/latex3/hyperref},
-  urldate = {2026-05-18}, 
-  date = {2026-04-24},
-  version = {7.01q},
+  urldate = {2026-11-09},
+  date = {2026-11-03},
+  version = {7.01t},
 }
+.EE
+.PP
+To write the result to a file:
+.EX
+ctanbib -o ctanbib.bib latex hyperref
+.EE
+.PP
+To use a custom label format and separator:
+.EX
+ctanbib -l author-year -s "-" latex
 .EE
 
 .SH SEE ALSO
-
 See ctanbib-doc.pdf (run: texdoc ctanbib) for more details.
+.PP
+https://ctan.org/pkg/ctanbib
 
 .SH AUTHOR
-
 Michal Hoftich
 .br
 https://github.com/michal-h21/ctanbib
 
 .SH LICENSE
-
 Permission is granted to copy, distribute and/or modify this software
 under the terms of the LaTeX Project Public License, either version 1.3
 of this license or (at your option) any later version.
