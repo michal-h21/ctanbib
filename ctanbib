@@ -131,6 +131,7 @@ Available options:
   -e,--entrytype    (default manual)  Change entry type
   -h,--help         Print this message
   -l,--labelformat  (default pgkname)  Change label format 
+  -o,--output       (default "") Write output to a file instead of stdout
   -p,--pkgname      Wrap the package name in a \ctanbibpkgname command
   -s,--separator    (default :)  Change label separator
   -v,--version      Print version info
@@ -153,6 +154,32 @@ elseif args.version then
   os.exit(0)
 elseif args.ctan then
   pkgurl = true
+end
+
+local output_file
+
+local output = function(s)
+  print(s)
+end
+
+local close = function()
+end
+
+-- the check for '""' is due to how lapp handles default values for string arguments.
+if args.output and args.output ~= '""' then
+  print("[ctanbib] Writing output to " .. args.output)
+  output_file = io.open(args.output, "w")
+  if not output_file then
+    print("[ctanbib] Error: cannot open output file " .. args.output)
+    os.exit(1)
+  end
+  output = function(s)
+    output_file:write(s .. "\n")
+  end
+
+  close = function()
+    output_file:close()
+  end
 end
 
 -- manual is set by default in --entrytype, we don't want it to override the --ctan option
@@ -366,7 +393,7 @@ local compile = function(template, records)
   end)
 end
 
-if preamble then print(preamble) end
+if preamble then output(preamble) end
 
 for _, pkgname in ipairs(args) do
   local url = "https://ctan.org/xml/2.0/pkg/" .. pkgname .. "?author-name=true"
@@ -403,5 +430,7 @@ for _, pkgname in ipairs(args) do
   -- update the bibliography type
   result = result:gsub("^@manual", "@" .. bibtype)
 
-  print(result)
+  output(result)
 end
+
+close()
