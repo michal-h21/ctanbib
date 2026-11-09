@@ -89,7 +89,7 @@ if args.pkgname then
   titleformat = "The \\ctanbibpkgname{%s} package"
   preamble = [[@preamble{ "\providecommand\ctanbibpkgname[1]{\textsl{#1}}" }
 ]] 
-  bibtexformat = preamble .. bibtexformat
+  bibtexformat = bibtexformat
 end
 
 local dom = require('luaxml-domobject')
@@ -252,6 +252,8 @@ local compile = function(template, records)
     return records[a] or ""
   end)
 end
+
+if preamble then print(preamble) end
 
 for _, pkgname in ipairs(args) do
   local url = "https://ctan.org/xml/2.0/pkg/" .. pkgname .. "?author-name=true"
