@@ -17,6 +17,100 @@ kpse.set_program_name("luatex")
 
 local lapp = require "lapp-mk4"
 
+local label_separator = ":"
+
+
+local label_formats = {
+  {
+    name = "pkgname",
+    help = "Use the package name as the label.",
+    cmd = function(pkginfo)
+      return pkginfo.pkgname
+    end
+  },
+  {
+    name = "pkgname-version",
+    help = "Use the package name and version as the label. If the version is not available, use the package date instead.",
+    cmd = function(pkginfo)
+      local version = pkginfo.version or pkginfo.date
+      return table.concat({pkginfo.pkgname, version}, label_separator)
+    end
+  },
+  {
+    name = "pkgname-date",
+    help = "Use the package name and date as the label.",
+    cmd = function(pkginfo)
+      return table.concat({pkginfo.pkgname, pkginfo.date}, label_separator)
+    end
+  },
+  {
+    name = "pkgname-date-version",
+    help = "Use the package name, date, and version as the label.",
+    cmd = function(pkginfo)
+      return table.concat({pkginfo.pkgname, pkginfo.date, pkginfo.version}, label_separator)
+    end
+  },
+  {
+    name = "pkgname-year",
+    help = "Use the package name and the year extracted from its date as the label.",
+    cmd = function(pkginfo)
+      local year = pkginfo.date and pkginfo.date:match("^(%d+)")
+      return table.concat({pkginfo.pkgname, year}, label_separator)
+    end
+  },
+  {
+    name = "author-year",
+    help = "Use the package author and the year extracted from its date as the label. If the author is not available, use the package name instead.",
+    cmd = function(pkginfo)
+      local author
+      if pkginfo.author then
+        -- get just the surname
+        author = pkginfo.author:match("^([^,^%s]+)") or pkginfo.author
+      else
+        author = pkginfo.pkgname
+      end
+      local year = pkginfo.date and pkginfo.date:match("^(%d+)")
+      return table.concat({author, year}, label_separator)
+    end
+  }
+}
+
+local function format_labels(msg, label_formats)
+  local terminal_width = 80
+  local max_width = 0
+  for _, format in ipairs(label_formats) do
+    max_width = math.max(max_width, #format.name)
+  end
+  max_width = max_width + 2
+  for _, format in ipairs(label_formats) do
+    local lines = {}
+    local words = {}
+    local current_length = 0
+    -- split the help text into words and build lines that fit within the terminal width
+    for word in format.help:gmatch("%S+") do
+      current_length = current_length + #word + 1
+      -- break lines if the current line exceeds the terminal width minus the maximum label width
+      if current_length > terminal_width - max_width then
+        table.insert(lines, table.concat(words, " "))
+        words = {}
+        current_length = 0
+      end
+      table.insert(words, word)
+    end
+    -- handle the last line
+    table.insert(lines, table.concat(words, " "))
+    for i, chunk in ipairs(lines) do
+      -- local chunk = format.help:sub(i, i + terminal_width - max_width - 1)
+      if i == 1 then
+        msg = msg .. string.format("%s%s\n", format.name .. string.rep(" ", (max_width - #format.name)), chunk)
+      else
+        msg = msg .. string.format("%s%s\n", string.rep(" ", max_width), chunk)
+      end
+    end
+  end
+  return msg
+end
+
 local bibtype = "manual"
 local pkgurl = false
 local msg = [[ctanbib - convert ctan package information to bibtex format
@@ -32,14 +126,24 @@ field value if that is specified in the Catalogue entry; if it isn't,
 https://ctan.org/pkg/PKGNAME is used.
 
 Available options:
-  -c,--ctan       Always use CTAN /pkg/ url instead of the package homepage 
-  -C,--ctanpath   Use the package's CTAN path as url (e.g.: /support/ctanbib)
-  -e,--entrytype  (default manual)  Change entry type
-  -h,--help       Print this message
-  -p,--pkgname    Wrap the package name in a \ctanbibpkgname command
-  -v,--version    Print version info
+  -c,--ctan         Always use CTAN /pkg/ url instead of the package homepage 
+  -C,--ctanpath     Use the package's CTAN path as url (e.g.: /support/ctanbib)
+  -e,--entrytype    (default manual)  Change entry type
+  -h,--help         Print this message
+  -l,--labelformat  (default pgkname)  Change label format 
+  -p,--pkgname      Wrap the package name in a \ctanbibpkgname command
+  -s,--separator    (default :)  Change label separator
+  -v,--version      Print version info
 
-ctanbib package page: https://ctan.org/pkg/ctanbib]]
+ctanbib package page: https://ctan.org/pkg/ctanbib
+
+Available label formats:
+]]
+
+-- Add list of available label formats to the help message
+msg = format_labels(msg, label_formats)
+
+
 local args = lapp(msg)
 if args.help then
   print(msg)
@@ -56,7 +160,7 @@ if args.entrytype~="manual" then
   bibtype = args.entrytype
 end
 
-
+label_separator = args.separator
 
 
 local pkgname = args[1]
@@ -230,7 +334,16 @@ local get_copyright_date = function(record)
     end
 
   end
-  
+end
+
+local function format_label(pkgname, record)
+  record.pkgname = pkgname
+  for _, format in ipairs(label_formats) do
+    if format.name == args.labelformat then
+      return format.cmd(record)
+    end
+  end
+  return pkgname
 end
 
 
@@ -270,7 +383,6 @@ for _, pkgname in ipairs(args) do
   local e = {}
 
   e.author = get_authors(record:query_selector("authorref"))
-  e.package = pkgname
   e.title = get_title(record)
   e.subtitle = get_caption(record)
   e.url = get_url(record, pkgname)
@@ -285,6 +397,7 @@ for _, pkgname in ipairs(args) do
     e.date = get_copyright_date(record)
   end
   e.urldate = os.date("%Y-%m-%d")
+  e.package = format_label(pkgname, e)
 
   local result = compile(bibtexformat, e)
   -- update the bibliography type
