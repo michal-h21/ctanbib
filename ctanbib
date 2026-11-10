@@ -126,6 +126,7 @@ field value if that is specified in the Catalogue entry; if it isn't,
 https://ctan.org/pkg/PKGNAME is used.
 
 Available options:
+  -b,--bibtex       Output plain BibTeX instead of BibLaTeX
   -c,--ctan         Always use CTAN /pkg/ url instead of the package homepage 
   -C,--ctanpath     Use the package's CTAN path as url (e.g.: /support/ctanbib)
   -e,--entrytype    (default manual)  Change entry type
@@ -215,6 +216,17 @@ local bibtexformat = [[
   version = {$version},
 }
 ]]
+
+if args.bibtex then
+  bibtexformat = [[
+@manual{$package,
+  title = {$title},
+  author = {$author},
+  year = {$year},
+  note = {Package version $version, released $date. Available at \url{$url} (accessed $urldate).}
+}
+]]
+end
 
 if args.pkgname then
   titleformat = "The \\ctanbibpkgname{%s} package"
@@ -423,6 +435,7 @@ for _, pkgname in ipairs(args) do
   if not e.date then 
     e.date = get_copyright_date(record)
   end
+  e.year = e.date and e.date:match("^(%d+)")
   e.urldate = os.date("%Y-%m-%d")
   e.package = format_label(pkgname, e)
 
