@@ -116,6 +116,20 @@ This produces a bib record with the @ctan type:
   version = {7.01t},
 }
 .EE
+.EX
+ctanbib -b hyperref
+.EE
+.PP
+This produces a bib record in the plain BibTeX format:
+.EX
+
+@manual{hyperref,
+  title = {The hyperref package},
+  author = {Oberdiek, Heiko and Rahtz, Sebastian and {The LaTeX Project Team}},
+  year = {2026},
+  note = {Package version 7.01t, released 2026-11-03. Available at \url{https://github.com/latex3/hyperref} (accessed 2026-11-11).}
+}
+.EE
 .PP
 To write the result to a file:
 .EX
