@@ -1,3 +1,4 @@
+
 \documentclass[11pt]{ltxdoc}
 \newcommand\package[1]{\texttt{#1}}
 \usepackage{longtable}
@@ -16,90 +17,180 @@
 \maketitle
 
 \section{Introduction}
-This package provides script named \package{ctanbib} which can be used for retrieving of the bibliographic information for packages hosted on CTAN.
 
-It looks up the Catalogue entry for each PKGNAME on CTAN (at
-\url{https://ctan.org/xml/2.0/pkg/PKGNAME}), and convert relevant information
-to a BibTeX entry.
+This package provides the \package{ctanbib} script, which can be used to
+retrieve bibliographic information about packages hosted on CTAN.
 
-By default, the url field in the output entry is the package's home
-field value if that is specified in the Catalogue entry; if it isn't,
-\url{https://ctan.org/pkg/PKGNAME is used}.
+It looks up the Catalogue entry for each package name on CTAN (at
+\url{https://ctan.org/xml/2.0/pkg/PKGNAME}) and converts relevant information
+into a Bib\TeX\ entry.
+
+By default, the \texttt{url} field in the output entry contains the package's
+\texttt{home} field value, if specified in the Catalogue entry. Otherwise,
+the URL \url{https://ctan.org/pkg/PKGNAME} is used.
 
 \section{Usage}
 
-
-It can be used in the following way:
-
+The script can be used in the following way:
 
 \medskip
 
-\noindent\package{ctanbib [options]  $\langle$packagename1$\rangle$ \ldots\ $\langle$packagenameX$\rangle$ > filename.bib}
+\noindent\package{ctanbib [options] $\langle$package-name$\rangle$ \ldots\ $\langle$package-name$\rangle$}
 
 \medskip
 
-The \texttt{curl} utility needs to be installed on the user's system in order to support the package info download.
+The \texttt{curl} utility needs to be installed on the user's system to
+download the package information.
 
+By default, the generated entries are formatted for Bib\LaTeX. Use the
+\texttt{--bibtex} option to produce plain Bib\TeX\ entries instead.
+
+The output is written to standard output unless the \texttt{--output}
+option is used to specify an output file.
 
 \section{Available options}
 
 \begin{description}
-  \item[-c,-\/-ctan] always use CTAN /pkg/ url instead of the package homepage 
-  \item[-C,-\/-ctanpath] use the package's CTAN path as url (e.g.: /support/ctanbib)
-  \item[-e,-\/-entrypoint] explicitly set the Bib\TeX\ entry type.
-  \item[-h,-\/-help] print the help message.
-  \item[-p,-\/-pkgname] wrap the package name in a \verb|\ctanbibpkgname| command.
-  \item[-v,-\/-version] print the version info.
+  \item[\texttt{-b, --bibtex}] Output plain Bib\TeX\ instead of Bib\LaTeX.
+  \item[\texttt{-c, --ctan}] Always use the CTAN \texttt{/pkg/} URL instead of the
+    package homepage.
+  \item[\texttt{-C, --ctanpath}] Use the package's CTAN path as the URL
+    (e.g., \texttt{/support/ctanbib}).
+  \item[\texttt{-e, --entrytype}] Change the Bib\TeX\ entry type. The default is
+    \texttt{manual}.
+  \item[\texttt{-h, --help}] Print the help message.
+  \item[\texttt{-l, --labelformat}] Change the label format. The default is
+    \texttt{pkgname}. See Section~\ref{sec:labelformats}.
+  \item[\texttt{-o, --output}] Write the output to a file instead of standard output.
+  \item[\texttt{-p, --pkgname}] Wrap the package name in a
+    \verb|\ctanbibpkgname| command.
+  \item[\texttt{-s, --separator}] Change the label separator. The default is a colon
+    (\texttt{:}).
+  \item[\texttt{-v, --version}] Print version information.
 \end{description}
 
+\subsection{Label formats}
+\label{sec:labelformats}
+
+The \texttt{--labelformat} option accepts the following values:
+
+\begin{description}
+  \item[\texttt{pkgname}] Use the package name as the label.
+  \item[\texttt{pkgname-version}] Use the package name and version as the
+    label. If the version is not available, use the package date instead.
+  \item[\texttt{pkgname-date}] Use the package name and date as the label.
+  \item[\texttt{pkgname-date-version}] Use the package name, date, and
+    version as the label.
+  \item[\texttt{pkgname-year}] Use the package name and the year extracted
+    from its date as the label.
+  \item[\texttt{author-year}] Use the package author and the year extracted
+    from its date as the label. If the author is not available, use the
+    package name instead.
+\end{description}
+
+The \texttt{--separator} option changes the character used to separate
+individual parts of the label. The default separator is a colon.
 
 \section{Examples}
 
 \begin{verbatim}
-ctanbib latex  
+ctanbib latex
 \end{verbatim}
 
-
-\noindent This invocation will print data in the Bib(La)\TeX\ format to the standard output:
+\noindent This minimal invocation prints a Bib\LaTeX\ entry to standard
+output:
 
 \begin{verbatim}
 @manual{latex,
-  title = {The latex package},
+  title = {The LaTeX package},
   subtitle = {A TeX macro package that defines LaTeX},
-  author = {{The LaTeX Team} and Lamport, Leslie},
-  url = {http://www.latex-project.org/},
-  urldate = {2021-06-26},
-  date = {},
-  version = {2021-06-01},
+  author = {Lamport, Leslie and {The LaTeX Project Team}},
+  url = {https://www.latex-project.org/},
+  urldate = {2026-11-09},
+  date = {2026-11-01},
+  version = {},
 }
 \end{verbatim}
 
-\noindent The \texttt{--ctan} option:
+\noindent Note that the output does not contain TeX control sequences and
+does not preserve capitalization perfectly. The script works only with
+the plain-text data available from CTAN; any typesetting refinements are
+left to the user.
+
+\subsection{Changing the entry type}
+
+The \texttt{--entrytype} option can be used to change the Bib\TeX\ entry
+type:
 
 \begin{verbatim}
-ctanbib -c latex
+ctanbib -e ctan hyperref
 \end{verbatim}
 
-\noindent This produces a bib record that uses the CTAN package entry for the URL, 
-instead of the original package URL.
+\noindent This produces an entry with the \texttt{ctan} type:
 
+\begin{verbatim}
+@ctan{hyperref,
+  title = {The hyperref package},
+  subtitle = {Extensive support for hypertext in LaTeX},
+  author = {Oberdiek, Heiko
+     and Rahtz, Sebastian
+     and {The LaTeX Project Team}},
+  url = {https://github.com/latex3/hyperref},
+  urldate = {2026-11-09},
+  date = {2026-11-03},
+  version = {7.01t},
+}
+\end{verbatim}
+
+\subsection{Generating plain Bib\TeX\ entries}
+
+By default, the script generates Bib\LaTeX\ entries. The \texttt{--bibtex}
+option switches to the plain Bib\TeX\ format:
+
+\begin{verbatim}
+ctanbib -b hyperref
+\end{verbatim}
+
+\noindent This produces the following entry:
+
+\begin{verbatim}
+@manual{hyperref,
+  title = {The hyperref package},
+  author = {Oberdiek, Heiko and Rahtz, Sebastian and {The LaTeX Project Team}},
+  year = {2026},
+  note = {Package version 7.01t, released 2026-11-03. 
+         Available at \url{https://github.com/latex3/hyperref} 
+         (accessed 2026-11-11).}
+}
+\end{verbatim}
+
+\subsection{Choosing the URL}
+
+By default, the package homepage is used as the URL, if available.
+The \texttt{--ctan} option forces the use of the CTAN package page instead:
+
+\begin{verbatim}
+$ ctanbib -c latex
+\end{verbatim}
+
+\noindent This produces an entry that uses the CTAN package page:
 
 \begin{verbatim}
 @manual{latex,
-  title = {The latex package},
   ...
   url = {https://ctan.org/pkg/latex},
   ...
 }
 \end{verbatim}
 
-\noindent The \texttt{--ctanpath} option:
+The \texttt{--ctanpath} option uses the package's location in the CTAN
+directory tree:
 
 \begin{verbatim}
-ctanbib -C biblatex
+$ ctanbib -C biblatex
 \end{verbatim}
 
-\noindent This produces a bib record that uses the CTAN package tree location for the URL.
+\noindent This produces an entry with the CTAN package path as its URL:
 
 \begin{verbatim}
 @manual{biblatex,
@@ -109,30 +200,17 @@ ctanbib -C biblatex
 }
 \end{verbatim}
 
+\subsection{Formatting package names}
 
-
-\noindent The \texttt{--entrytype} option:
-
-\begin{verbatim}
-ctanbib -e ctan latex
-\end{verbatim}
-
-\noindent It selects different entry type for the record:
+The \texttt{--pkgname} option wraps the package name in the
+\verb|\ctanbibpkgname| command:
 
 \begin{verbatim}
-@ctan{latex,
-  ...
-}
+$ ctanbib -p latex
 \end{verbatim}
 
-\noindent The \texttt{--pkgname} option:
-
-\begin{verbatim}
-ctanbib -p latex
-\end{verbatim}
-
-\noindent Puts the package name into the \verb|\ctanbibpkgname| command, which can be
-redefined by user to produce a special formatting of the name:
+\noindent This allows the user to redefine the command to apply custom
+formatting to package names:
 
 \begin{verbatim}
 @preamble{ "\providecommand\ctanbibpkgname[1]{\textsl{#1}}" }
@@ -142,20 +220,60 @@ redefined by user to produce a special formatting of the name:
 }
 \end{verbatim}
 
+\subsection{Changing label formats}
+
+The \texttt{--labelformat} option changes the format of the generated
+Bib\TeX\ label:
+
+\begin{verbatim}
+$ ctanbib -l author-year latex
+\end{verbatim}
+
+\noindent This uses the package author and the year extracted from the
+package date. If the author is unavailable, the package name is used
+instead.
+
+The \texttt{--separator} option changes the separator between label
+components. For example:
+
+\begin{verbatim}
+$ ctanbib -l author-year -s "-" latex
+\end{verbatim}
+
+\noindent uses a hyphen instead of the default colon:
+
+\begin{verbatim}
+@manual{Lamport-2026,
+  ...
+  author = {Lamport, Leslie and {The LaTeX Project Team}},
+  date = {2026-11-01},
+  ...
+}
+\end{verbatim}
+
+\subsection{Writing output to a file}
+
+The \texttt{--output} option writes the generated entries to a file instead
+of standard output:
+
+\begin{verbatim}
+$ ctanbib -o ctanbib.bib latex hyperref
+\end{verbatim}
 
 \section{License}
 
 Permission is granted to copy, distribute and/or modify this software
-under the terms of the \LaTeX\ Project Public License, version 1.3.
+under the terms of the \LaTeX\ Project Public License, either version 1.3
+of this license or (at your option) any later version.
 
 \section{Acknowledgements}
 
 This package was created thanks to TeX.sx user
-Daniel\footnote{\url{https://tex.stackexchange.com/users/3751/daniel}}. Lukas
-C.~Bossert had useful comments which led to update of the original script and
-it's eventual release on CTAN. Herbert Voss added the \verb|--CTAN| option.
-Karl Berry and Boris Veytsman suggested addition of the \verb|--pkgname| option 
-and leaving package names uncapitalized.
+Daniel\footnote{\url{https://tex.stackexchange.com/users/3751/daniel}}.
+Lukas C.~Bossert had useful comments which led to updates of the original
+script and its eventual release on CTAN. Herbert Voss added the
+\verb|--CTAN| option. Karl Berry and Boris Veytsman suggested adding the
+\verb|--pkgname| option and leaving package names uncapitalized.
 
 \newpage
 \section{Changelog}
@@ -164,6 +282,7 @@ and leaving package names uncapitalized.
   \change{2026-11-09}{Added the \verb|--bibtex| option}
   \change{2026-11-09}{Added the \verb|--output| option}
   \change{2026-11-09}{Added the \verb|--labelformat| option}
+  \change{2026-11-09}{Added the \verb|--separator| option}
   \change{2026-11-09}{Print preamble only once}
   \change{2026-05-26}{Version 0.2e released}
   \change{2026-05-26}{Use repository address as URL if the home field is missing}
@@ -178,23 +297,23 @@ and leaving package names uncapitalized.
   \change{2023-09-14}{Renamed the \verb|--tugboat| option to \verb|--pkgname|}
   \change{2023-09-12}{Don't capitalize package names}
   \change{2023-09-12}{Added the \verb|--tugboat| option for creation of records suitable for the TUGboat journal}
-  \change{2023-02-20}{Verson 0.2b released}
+  \change{2023-02-20}{Version 0.2b released}
   \change{2023-02-20}{Use \verb|--ssl-no-revoke| option for Curl, to prevent SSL certificate errors}
   \change{2023-02-20}{Better handling of errors in package info downloading}
   \change{2023-02-20}{Fixed link to the author mail address}
   \change{2021-06-29}{Version 0.2a released}
-  \change{2021-06-29}{Added the \verb|--ctanpath| option.}
+  \change{2021-06-29}{Added the \verb|--ctanpath| option}
   \change{2021-06-26}{Version 0.2 released}
-  \change{2021-06-26}{Removed the \verb|--CTAN| option, entry type can be set using \verb|--entrytype| and CTAN URL is requested using \verb|--ctan|}
-  \change{2021-06-26}{Added \verb|--entrytype| option for explicit specification of the Bib\TeX\ entry type}
+  \change{2021-06-26}{Removed the \verb|--CTAN| option; entry type can be set using \verb|--entrytype| and the CTAN URL is requested using \verb|--ctan|}
+  \change{2021-06-26}{Added the \verb|--entrytype| option for explicit specification of the Bib\TeX\ entry type}
   \change{2021-06-26}{Fixed package name verification}
   \change{2021-06-26}{Added support for multiple package names}
   \change{2021-06-26}{Print \verb|https://www.ctan.org/pkg/<pkgname>| with the \texttt{-c} option}
   \change{2021-06-20}{Version 0.1e released}
-  \change{2021-06-20}{Added \verb|--CTAN| option, thanks to Herbert Voss}
+  \change{2021-06-20}{Added the \verb|--CTAN| option, thanks to Herbert Voss}
   \change{2019-12-23}{Don't return non-zero exit codes for non-error runs}
-  \change{2019-12-23}{Test for the packagename with the \texttt{-c} option}
-  \change{2019-09-21}{Try to find the author in full CTAN author list if the author cannot be found in the package info}
+  \change{2019-12-23}{Test for the package name with the \texttt{-c} option}
+  \change{2019-09-21}{Try to find the author in the full CTAN author list if the author cannot be found in the package info}
   \change{2019-09-16}{Use the CTAN API 2.0 to fetch the package info}
   \change{2019-05-04}{Version 0.1c released}
   \change{2019-05-04}{Use the \texttt{curl} command to download the package info}
@@ -202,14 +321,13 @@ and leaving package names uncapitalized.
   \change{2019-03-11}{Version 0.1b released}
   \change{2018-09-10}{Added support for institutional names}
   \change{2018-09-10}{Escape TeX commands in the title and subtitle}
-  \change{2018-08-29}{Added man page}
-  \change{2018-08-27}{Added --ctan option}
-  \change{2018-08-23}{Version 0.1 released.}
-  \change{2018-08-23}{Created documentation.}
-  \change{2018-08-21}{Rewrote the script to use the DOM api provided by LuaXML. This provides greater flexibility in the XML processing.}
-  \change{2018-08-20}{Fixed the script for the current XML format provided by CTAN.}
-  \change{2014-09-12}{Initial version of the script have been released in answer on TeX.sx\footnote{\url{https://tex.stackexchange.com/a/200856/2891}}.}
+  \change{2018-08-29}{Added the man page}
+  \change{2018-08-27}{Added the \texttt{--ctan} option}
+  \change{2018-08-23}{Version 0.1 released}
+  \change{2018-08-23}{Created the documentation}
+  \change{2018-08-21}{Rewrote the script to use the DOM API provided by LuaXML, allowing more flexible XML processing}
+  \change{2018-08-20}{Fixed the script for the current XML format provided by CTAN}
+  \change{2014-09-12}{Initial version of the script released in an answer on TeX.sx\footnote{\url{https://tex.stackexchange.com/a/200856/2891}}}
 \end{changelog}
-
 
 \end{document}
